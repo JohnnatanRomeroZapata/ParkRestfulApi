@@ -4,8 +4,12 @@ bin-release/
 [Oo]bj/
 [Bb]in/
 
+#User-specific files
+.suo
+
 # Other files and folders
 .settings/
+.vs/
 
 # Executables
 *.swf
