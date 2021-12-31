@@ -70,7 +70,7 @@ namespace ParkApi.Controllers
 
 
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(NationalPark))]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(NationalParkDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
