@@ -4,13 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ParkApi.Data;
-using ParkApi.Repository;
-using ParkApi.Repository.IRepositories;
-using ParkApi.ParkMapper;
-using System.Reflection;
-using System.IO;
+using ParkCore.Interfaces.IRepositories;
+using ParkCore.Interfaces.IServices;
+using ParkCore.Services;
+using ParkInfrastructure.Data;
+using ParkInfrastructure.ParkMapper;
+using ParkInfrastructure.Repository;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace ParkApi
 {
@@ -34,8 +36,12 @@ namespace ParkApi
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("ParkApiConnectionString")));
 
-            services.AddScoped<INationalParkRepository, NationalParkRepository>();
-            services.AddScoped<ITrailRepository, TrailRepository>();
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<INationalParkRepository, NationalParkRepository>();
+            services.AddTransient<INationalParkService, NationalParkService>();
+            services.AddTransient<ITrailRepository, TrailRepository>();
 
             services.AddAutoMapper(typeof(ParkMappings));
 

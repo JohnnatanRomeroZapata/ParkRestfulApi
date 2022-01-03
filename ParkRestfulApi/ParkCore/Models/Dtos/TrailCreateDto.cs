@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
-using static ParkApi.Models.Trail;
+﻿using System.ComponentModel.DataAnnotations;
+using static ParkCore.Models.Trail;
 
-namespace ParkApi.Models.Dtos
+namespace ParkCore.Models.Dtos
 {
     public class TrailCreateDto
     {

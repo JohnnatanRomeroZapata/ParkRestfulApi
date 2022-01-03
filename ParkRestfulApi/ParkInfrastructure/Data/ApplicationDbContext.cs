@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ParkApi.Models;
+using ParkCore.Models;
 
-namespace ParkApi.Data
+namespace ParkInfrastructure.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -10,9 +10,9 @@ namespace ParkApi.Data
 
         }
 
-        public DbSet<NationalPark> NationalParks { get; set; }
+        public virtual DbSet<NationalPark> NationalParks { get; set; }
 
-        public DbSet<Trail> Trails { get; set; }
+        public virtual DbSet<Trail> Trails { get; set; }
 
     }
 }

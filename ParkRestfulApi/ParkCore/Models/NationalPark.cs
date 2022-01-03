@@ -1,15 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace ParkApi.Models
+namespace ParkCore.Models
 {
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-    public class NationalPark
-
+    public class NationalPark : BaseModel
     {
-        [Key]
-        public int Id { get; set; }
-
         [Required]
         public string Name { get; set; }
 

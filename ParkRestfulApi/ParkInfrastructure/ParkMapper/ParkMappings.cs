@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
-using ParkApi.Models;
-using ParkApi.Models.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ParkCore.Models;
+using ParkCore.Models.Dtos;
 
-namespace ParkApi.ParkMapper
+namespace ParkInfrastructure.ParkMapper
 {
     public class ParkMappings : Profile
     {
