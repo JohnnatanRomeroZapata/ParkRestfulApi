@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ParkApi.Models;
-using ParkApi.Models.Dtos;
-using ParkApi.Repository.IRepositories;
+using ParkCore.Interfaces.IServices;
+using ParkCore.Models;
+using ParkCore.Models.Dtos;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ParkApi.Controllers
 {
@@ -13,12 +14,12 @@ namespace ParkApi.Controllers
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class NationalParksController : ControllerBase
     {
-        private readonly INationalParkRepository _npRepository;
+        private readonly INationalParkService _npService;
         private readonly IMapper _mapper;
 
-        public NationalParksController(INationalParkRepository npRepository, IMapper mapper)
+        public NationalParksController(INationalParkService npService, IMapper mapper)
         {
-            _npRepository = npRepository;
+            _npService = npService;
             _mapper = mapper;
         }
 
@@ -33,7 +34,7 @@ namespace ParkApi.Controllers
         [ProducesDefaultResponseType]
         public IActionResult GetNationalParks()
         {
-            ICollection<NationalPark> nationalParkList = _npRepository.GetNationalParks();
+            ICollection<NationalPark> nationalParkList = _npService.GetNationalParks();
             ICollection<NationalParkDto> nationalParkDtoList = new List<NationalParkDto>();
 
             foreach (var np in nationalParkList)
@@ -54,9 +55,9 @@ namespace ParkApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(NationalParkDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public IActionResult GetNationalPark(int nationalParkId)
+        public async Task<IActionResult> GetNationalPark(int nationalParkId)
         {
-            NationalPark nationalPark = _npRepository.GetNationalPark(nationalParkId);
+            NationalPark nationalPark = await _npService.GetNationalPark(nationalParkId);
 
             if(nationalPark is null)
             {
@@ -74,14 +75,14 @@ namespace ParkApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public IActionResult CreateNationalPark([FromBody]NationalParkDto nationalParkDto)
+        public async Task<IActionResult> CreateNationalPark([FromBody]NationalParkDto nationalParkDto)
         {
             if(nationalParkDto is null)
             {
                 return BadRequest(ModelState);
             }
 
-            if (_npRepository.NationalParkExists(nationalParkDto.Name))
+            if (_npService.ExistsNationalParkByName(nationalParkDto.Name))
             {
                 ModelState.AddModelError("", "National Park already exists");
                 return StatusCode(404, ModelState);
@@ -89,7 +90,7 @@ namespace ParkApi.Controllers
 
             NationalPark nationalPark = _mapper.Map<NationalPark>(nationalParkDto);
 
-            if (!_npRepository.CreateNationalPark(nationalPark))
+            if (!(await _npService.CreateNationalPark(nationalPark)))
             {
                 ModelState.AddModelError("", $"{nationalPark.Name} was not created");
                 return StatusCode(500, ModelState);
@@ -105,7 +106,7 @@ namespace ParkApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public IActionResult UpdateNationalPark(int nationalParkId, [FromBody] NationalParkDto nationalParkDto)
+        public async Task<IActionResult> UpdateNationalPark(int nationalParkId, [FromBody] NationalParkDto nationalParkDto)
         {
             if (nationalParkDto is null || nationalParkDto.Id != nationalParkId)
             {
@@ -114,7 +115,7 @@ namespace ParkApi.Controllers
 
             NationalPark nationalPark = _mapper.Map<NationalPark>(nationalParkDto);
 
-            if (!_npRepository.UpdateNationalPark(nationalPark))
+            if (!(await _npService.UpdateNationalPark(nationalPark)))
             {
                 ModelState.AddModelError("", $"{nationalPark.Name} was not updated");
                 return StatusCode(500, ModelState);
@@ -123,22 +124,22 @@ namespace ParkApi.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{nationalParkId:int}", Name = "DeleteNationalPark")]
+        [HttpDelete("{nationalParkId:int}", Name = "RemoveNationalPark")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public IActionResult DeleteNationalPark(int nationalParkId)
+        public async Task<IActionResult> RemoveNationalPark(int nationalParkId)
         {
-            if (!_npRepository.NationalParkExists(nationalParkId))
+            if (!(await _npService.ExistsNationalParkById(nationalParkId)))
             {
                 return NotFound();
             }
 
-            NationalPark nationalPark = _npRepository.GetNationalPark(nationalParkId);
+            NationalPark nationalPark = await _npService.GetNationalPark(nationalParkId);
 
-            if (!_npRepository.DeleteNationalPark(nationalPark))
+            if (!(await _npService.RemoveNationalPark(nationalPark)))
             {
                 ModelState.AddModelError("", $"{nationalPark.Name} was not deleted");
                 return StatusCode(500, ModelState);

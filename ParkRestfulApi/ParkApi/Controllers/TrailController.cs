@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using ParkApi.Models;
-using ParkApi.Models.Dtos;
-using ParkApi.Repository.IRepositories;
-using System;
+using ParkCore.Interfaces.IServices;
+using ParkCore.Models;
+using ParkCore.Models.Dtos;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace ParkApi.Controllers
@@ -15,12 +13,12 @@ namespace ParkApi.Controllers
     [ApiController]
     public class TrailController : ControllerBase
     {
-        private readonly ITrailRepository _trailRepository;
+        private readonly ITrailService _trailService;
         private readonly IMapper _mapper;
 
-        public TrailController(ITrailRepository trailRepository, IMapper mapper)
+        public TrailController(ITrailService trailService, IMapper mapper)
         {
-            _trailRepository = trailRepository;
+            _trailService = trailService;
             _mapper = mapper;
         }
 
@@ -34,7 +32,7 @@ namespace ParkApi.Controllers
         [ProducesDefaultResponseType]
         public IActionResult GetTrails()
         {
-            ICollection<Trail> trailList = _trailRepository.GetTrails();
+            ICollection<Trail> trailList = _trailService.GetTrails();
             ICollection<TrailDto> trailDtoList = new List<TrailDto>();
 
             foreach (var trail in trailList)
@@ -55,9 +53,9 @@ namespace ParkApi.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TrailDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
-        public IActionResult GetTrail(int trailId)
+        public async Task<IActionResult> GetTrail(int trailId)
         {
-            Trail trail = _trailRepository.GetTrail(trailId);
+            Trail trail = await _trailService.GetTrail(trailId);
 
             if (trail is null)
             {
@@ -75,14 +73,14 @@ namespace ParkApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public IActionResult CreateTrail([FromBody] TrailCreateDto trailCreateDto)
+        public async Task<IActionResult> CreateTrail([FromBody] TrailCreateDto trailCreateDto)
         {
             if (trailCreateDto is null)
             {
                 return BadRequest(ModelState);
             }
 
-            if (_trailRepository.TrailExists(trailCreateDto.Name))
+            if (_trailService.ExistsTrailByName(trailCreateDto.Name))
             {
                 ModelState.AddModelError("", "Trail already exists");
                 return StatusCode(404, ModelState);
@@ -90,7 +88,7 @@ namespace ParkApi.Controllers
 
             Trail trail = _mapper.Map<Trail>(trailCreateDto);
 
-            if (!_trailRepository.CreateTrail(trail))
+            if (!(await _trailService.CreateTrail(trail)))
             {
                 ModelState.AddModelError("", $"{trail.Name} was not created");
                 return StatusCode(500, ModelState);
@@ -106,7 +104,7 @@ namespace ParkApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public IActionResult UpdateTrail(int trailId, [FromBody] TrailUpdateDto trailUpdateDto)
+        public async Task<IActionResult> UpdateTrail(int trailId, [FromBody] TrailUpdateDto trailUpdateDto)
         {
             if (trailUpdateDto is null || trailUpdateDto.Id != trailId)
             {
@@ -115,7 +113,7 @@ namespace ParkApi.Controllers
 
             Trail trail = _mapper.Map<Trail>(trailUpdateDto);
 
-            if (!_trailRepository.UpdateTrail(trail))
+            if (!(await _trailService.UpdateTrail(trail)))
             {
                 ModelState.AddModelError("", $"{trail.Name} was not updated");
                 return StatusCode(500, ModelState);
@@ -130,16 +128,16 @@ namespace ParkApi.Controllers
         [ProducesResponseType(StatusCodes.Status409Conflict)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public IActionResult DeleteTrail(int trailId)
+        public async Task<IActionResult> DeleteTrail(int trailId)
         {
-            if (!_trailRepository.TrailExists(trailId))
+            if (!(await _trailService.ExistsTrailById(trailId)))
             {
                 return NotFound();
             }
 
-            Trail trail = _trailRepository.GetTrail(trailId);
+            Trail trail = await _trailService.GetTrail(trailId);
 
-            if (!_trailRepository.DeleteTrail(trail))
+            if (!(await _trailService.RemoveTrail(trail)))
             {
                 ModelState.AddModelError("", $"{trail.Name} was not deleted");
                 return StatusCode(500, ModelState);
