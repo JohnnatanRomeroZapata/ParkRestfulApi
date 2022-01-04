@@ -17,12 +17,12 @@ namespace ParkCore.Services
 
         public ICollection<Trail> GetTrails()
         {
-            return _unitOfWork.TrailRepository.GetAll();
+            return _unitOfWork.TrailRepository.GetTrails();
         }
 
         public async Task<Trail> GetTrail(int trailId)
         {
-            return await _unitOfWork.TrailRepository.GetById(trailId);
+            return await _unitOfWork.TrailRepository.GetTrail(trailId);
         }
 
         public async Task<bool> CreateTrail(Trail trail)
