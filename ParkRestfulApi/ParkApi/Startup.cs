@@ -42,6 +42,8 @@ namespace ParkApi
             services.AddTransient<INationalParkRepository, NationalParkRepository>();
             services.AddTransient<INationalParkService, NationalParkService>();
             services.AddTransient<ITrailRepository, TrailRepository>();
+            services.AddTransient<ITrailService, TrailService>();
+
 
             services.AddAutoMapper(typeof(ParkMappings));
 
