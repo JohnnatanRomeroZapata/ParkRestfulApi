@@ -16,5 +16,7 @@ namespace ParkCore.Models.Dtos
         public DateTime EstablishedOn { get; set; }
 
         public DateTime CreatedOn { get; set; }
+
+        public byte[] Picture { get; set; }
     }
 }

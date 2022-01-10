@@ -10,6 +10,10 @@ namespace ParkCore.Interfaces.IRepositories
 
         Task<Trail> GetTrail(int trailId);
 
+        ICollection<Trail> GetTrailsInNationalPark(int nationalParkId);
+
         bool ExistsTrailByName(string trailName);
+
+        
     }
 }
