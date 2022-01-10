@@ -30,9 +30,9 @@ namespace ParkInfrastructure.Repository
             return _entities.Any(trail => trail.Name.Trim().ToLower() == trailName.Trim().ToLower());
         }
 
-        //public ICollection<Trail> GetTrailsInNationalPark(int trailId)
-        //{
-        //    return _applicationDbContext.Trails.Include(t => t.NationalPark).Where(t => t.NationalParkId == trailId).ToList();
-        //}
+        public ICollection<Trail> GetTrailsInNationalPark(int nationalParkId)
+        {
+            return _entities.Include(trail => trail.NationalPark).Where(trail => trail.NationalParkId == nationalParkId).ToList();
+        }
     }
 }

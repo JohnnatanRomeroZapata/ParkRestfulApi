@@ -10,6 +10,8 @@ namespace ParkCore.Interfaces.IServices
 
         Task<Trail> GetTrail(int entityId);
 
+        ICollection<Trail> GetTrailsInNationalPark(int nationalParkId);
+
         Task<bool> CreateTrail(Trail entity);
 
         Task<bool> UpdateTrail(Trail entity);

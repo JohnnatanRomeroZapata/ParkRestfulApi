@@ -25,6 +25,11 @@ namespace ParkCore.Services
             return await _unitOfWork.TrailRepository.GetTrail(trailId);
         }
 
+        public ICollection<Trail> GetTrailsInNationalPark(int nationalParkId)
+        {
+            return _unitOfWork.TrailRepository.GetTrailsInNationalPark(nationalParkId);
+        }
+
         public async Task<bool> CreateTrail(Trail trail)
         {
             await _unitOfWork.TrailRepository.Create(trail);

@@ -9,8 +9,10 @@ using System.Threading.Tasks;
 
 namespace ParkApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    //[Route("api/[controller]")]
     [ApiController]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TrailController : ControllerBase
     {
         private readonly ITrailService _trailService;
@@ -68,6 +70,31 @@ namespace ParkApi.Controllers
         }
 
 
+        [HttpGet("[action]/{nationalParkId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(TrailDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesDefaultResponseType]
+        public IActionResult GetTrailInNationalPark(int nationalParkId)
+        {
+            ICollection<Trail> trailList = _trailService.GetTrailsInNationalPark(nationalParkId);
+
+            if (trailList is null)
+            {
+                return NotFound();
+            }
+
+            var trailDtoList = new List<TrailDto>();
+
+
+            foreach (var trail in trailList)
+            {
+                trailDtoList.Add(_mapper.Map<TrailDto>(trail));
+            }
+
+            return Ok(trailDtoList);
+        }
+
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(TrailDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -94,7 +121,7 @@ namespace ParkApi.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return CreatedAtRoute("GetTrail", new { trailId = trail.Id }, trail);
+            return CreatedAtRoute("GetTrail", new {version = HttpContext.GetRequestedApiVersion().ToString(), trailId = trail.Id }, trail);
         }
 
 

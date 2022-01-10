@@ -7,6 +7,10 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20220103003012_MigrationTestAfterImplementingCleanArchitecture.cs" />
     <Compile Remove="Data\Migrations\20220103003012_MigrationTestAfterImplementingCleanArchitecture.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220104135436_Test1Migration.cs" />
+    <Compile Remove="Data\Migrations\20220104135436_Test1Migration.Designer.cs" />
+    <Compile Remove="Data\Migrations\20220110013351_AddPictureToModelNationalPark.cs" />
+    <Compile Remove="Data\Migrations\20220110013351_AddPictureToModelNationalPark.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
