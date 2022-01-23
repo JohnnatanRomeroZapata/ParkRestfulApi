@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.31229.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkApi", "ParkApi\ParkApi.csproj", "{54CF523F-5B4A-4A83-80D2-55D282B84AD9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkCore", "ParkCore\ParkCore.csproj", "{5ADAE574-4614-47DA-B841-A6793A045F46}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkCore", "ParkCore\ParkCore.csproj", "{5ADAE574-4614-47DA-B841-A6793A045F46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkInfrastructure", "ParkInfrastructure\ParkInfrastructure.csproj", "{26F78B83-094D-4B8D-9FA4-8B234603655D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParkInfrastructure", "ParkInfrastructure\ParkInfrastructure.csproj", "{26F78B83-094D-4B8D-9FA4-8B234603655D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParkWeb", "ParkWeb\ParkWeb.csproj", "{D3102B16-618F-4755-9F2E-48F7A34BF79E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{26F78B83-094D-4B8D-9FA4-8B234603655D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{26F78B83-094D-4B8D-9FA4-8B234603655D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{26F78B83-094D-4B8D-9FA4-8B234603655D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3102B16-618F-4755-9F2E-48F7A34BF79E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3102B16-618F-4755-9F2E-48F7A34BF79E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3102B16-618F-4755-9F2E-48F7A34BF79E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3102B16-618F-4755-9F2E-48F7A34BF79E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
