@@ -1,0 +1,103 @@
+﻿@model ParkCore.Models.Dtos.NationalParkDto
+
+@{
+    var title = "Create National Park";
+}
+
+<span id="toastrMessagge" class="d-none">@TempData["Message"]</span>
+
+<form method="post" enctype="multipart/form-data" asp-controller="NationalPark" asp-action="CreateUpdateNationalPark">
+
+    @if (Model.Id != 0)
+    {
+        title = "Update National Park";
+        <input type="hidden" asp-for="@Model.Id" />
+    }
+
+
+    <div class="border p-3">
+        <div class="form-group row">
+            <h2 class="text-info pl-3">@title</h2>
+        </div>
+
+        <div class="row">
+            <div class="col-8">
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="@Model.Name"></label>
+                    </div>
+                    <div class="col-8">
+                        <input id="npName" type="text" asp-for="@Model.Name" class="form-control" />
+                        <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="@Model.State"></label>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" id="npState" asp-for="@Model.State" class="form-control" />
+                        <span asp-validation-for="@Model.State" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="@Model.Picture"></label>
+                    </div>
+                    <div class="col-8">
+                        <input type="file" id="npPicture" asp-for="@Model.Picture" name="files" multiple class="form-control" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-4">
+                        <label asp-for="@Model.EstablishedOn"></label>
+                    </div>
+                    <div class="col-8">
+                        @{
+                            if (Model.Id != 0)
+                            {
+                                <input type="date" id="npEstablishedOn" asp-for="@Model.EstablishedOn" class="form-control" />
+                            }
+                            else
+                            {
+                                var dateEstablished = "";
+                                <input type="date" id="npEstablishedOn" value="@dateEstablished" asp-for="@Model.EstablishedOn" class="form-control" />
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-8 offset-4 row">
+                        <div class="col">
+                            @if (Model.Id != 0)
+                            {
+                                <button id="btnUpdate" class="btn btn-warning w-100"> <i class="fas fa-pen"></i> Update </button>
+                            }
+                            else
+                            {
+                                <button id="btnCreate" class="btn btn-success w-100"> <i class="fas fa-plus"></i> Create </button>
+                            }
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-dark w-100" asp-controller="NationalPark" asp-action="IndexNationalPark"> <i class="fas fa-arrow-left"></i> Go Back</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                @if (Model.Picture != null)
+                {
+                    var base64 = Convert.ToBase64String(Model.Picture);
+                    var imgsrc = string.Format($"data:image/jgp;base64,{base64}");
+
+                    <img src="@imgsrc" class="img-fluid rounded" />
+                }
+            </div>
+        </div>
+
+    </div>
+</form>
+
+@section Scripts{
+    <script src="~/js/nationalPark.js"></script>
+}
